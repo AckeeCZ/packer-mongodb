@@ -1,0 +1,53 @@
+{
+  "variables": {
+    "BUILD_NUMBER": "{{env `BUILD_NUMBER`}}",
+    "GOOGLE_APPLICATION_CREDENTIALS": "{{env `GOOGLE_APPLICATION_CREDENTIALS`}}",
+    "PROJECT_NAME": "{{env `CLOUD_PROJECT`}}",
+    "PROJECT_ZONE": "europe-west1-d",
+    "GCS_BUCKET": "ackee-images"
+  },
+  "builders": [
+    {
+      "type": "googlecompute",
+      "project_id": "{{user `PROJECT_NAME`}}",
+      "source_image": "ubuntu-1604-xenial-v20180306",
+      "ssh_username": "ubuntu",
+      "zone": "{{user `PROJECT_ZONE`}}",
+      "image_name": "mongodb-{{user `BUILD_NUMBER`}}",
+      "image_family": "ackee-mongodb",
+      "preemptible": true
+    }
+  ],
+  "provisioners": [
+    {
+        "type": "file",
+        "source": "./systemd-override.conf",
+        "destination": "/tmp/"
+    },
+    {
+        "type": "shell",
+        "environment_vars": ["MONGO_VER=3.4"],
+        "script": "./install.sh"
+    },
+    {
+        "type": "shell",
+        "script": "./stackdriver.sh"
+    },
+    {
+        "type": "file",
+        "source": "./mongod.conf.tpl",
+        "destination": "/tmp/"
+    }
+
+  ],
+  "post-processors": [
+    {
+      "type": "googlecompute-export",
+      "paths": [
+        "gs://{{user `GCS_BUCKET`}}/ackee-mongodb3.4-disk-latest.tar.gz",
+        "gs://{{user `GCS_BUCKET`}}/ackee-mongodb3.4-disk-{{user `BUILD_NUMBER`}}.tar.gz"
+      ],
+      "keep_input_artifact": false
+    }
+  ]
+}
