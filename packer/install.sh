@@ -6,7 +6,7 @@ apt-get update || echo "this is for VM images only"
 apt-get install -y sudo || echo "this is for VM images only"
 
 sudo apt-get -qq update
-sudo apt-get install -y wget software-properties-common lsb-release perl curl pwgen
+sudo apt-get install -y wget software-properties-common lsb-release perl curl pwgen sysstat
 
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927 #3.2
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6 #3.4
