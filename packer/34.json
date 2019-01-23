@@ -10,7 +10,7 @@
     {
       "type": "googlecompute",
       "project_id": "{{user `PROJECT_NAME`}}",
-      "source_image": "ubuntu-1604-xenial-v20180306",
+      "source_image": "ubuntu-1604-xenial-v20190122a",
       "ssh_username": "ubuntu",
       "zone": "{{user `PROJECT_ZONE`}}",
       "image_name": "mongodb-{{user `BUILD_NUMBER`}}",
